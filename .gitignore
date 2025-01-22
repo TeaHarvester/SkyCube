@@ -1,0 +1,9 @@
+Unity/
+Colourmaps/
+*.o
+*.exe
+*.aux
+*.txt
+*.csv
+*.m
+*.py
