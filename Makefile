@@ -1,26 +1,29 @@
 CC = g++
-CXXFLAGS = -Wall -g -fopenmp
+CXXFLAGS = -Wall -g -O2 -fopenmp -IInclude
 
 ECOSIM: Main.o Map.o Atmosphere.o Earth.o SkyCubeMP.o SkyCube.o
 	$(CC) $(CXXFLAGS) Main.o Map.o Atmosphere.o Earth.o SkyCubeMP.o SkyCube.o -o $@
 
-Main.o: Main.cpp Map.cpp Map.h 
-	$(CC) $(CXXFLAGS) -c Main.cpp -o Main.o
+Main.o: Source/Main.cpp Source/Map.cpp 
+	$(CC) $(CXXFLAGS) -c Source/Main.cpp -o Main.o
 
-Map.o: Map.cpp Map.h Atmosphere.cpp Atmosphere.h
-	$(CC) $(CXXFLAGS) -c Map.cpp -o Map.o
+Map.o: Source/Map.cpp Source/Atmosphere.cpp
+	$(CC) $(CXXFLAGS) -c Source/Map.cpp -o Map.o
 
-Atmosphere.o: Atmosphere.cpp Atmosphere.h
-	$(CC) $(CXXFLAGS) -c Atmosphere.cpp -o Atmosphere.o
+Atmosphere.o: Source/Atmosphere.cpp
+	$(CC) $(CXXFLAGS) -c Source/Atmosphere.cpp -o Atmosphere.o
 
-Earth.o: Earth.cpp Earth.h Map.cpp Map.h Atmosphere.cpp Atmosphere.h
-	$(CC) $(CXXFLAGS) -c Earth.cpp -o Earth.o
+Earth.o: Source/Earth.cpp Source/Map.cpp Source/Atmosphere.cpp
+	$(CC) $(CXXFLAGS) -c Source/Earth.cpp -o Earth.o
 
-SkyCubeMP.o: SkyCubeMP.cpp SkyCubeMP.h Earth.cpp Earth.h Atmosphere.cpp Atmosphere.h Map.cpp Map.h
-	$(CC) $(CXXFLAGS) -c SkyCubeMP.cpp -o SkyCubeMP.o
+SkyCubeMP.o: Source/SkyCubeMP.cpp Source/Earth.cpp Source/Atmosphere.cpp Source/Map.cpp
+	$(CC) $(CXXFLAGS) -c Source/SkyCubeMP.cpp -o SkyCubeMP.o
 
-SkyCube.o: SkyCube.cpp SkyCube.h Earth.cpp Earth.h Atmosphere.cpp Atmosphere.h Map.cpp Map.h
-	$(CC) $(CXXFLAGS) -c SkyCube.cpp -o SkyCube.o
+SkyCube.o: Source/SkyCube.cpp Source/Earth.cpp Source/Atmosphere.cpp Source/Map.cpp
+	$(CC) $(CXXFLAGS) -c Source/SkyCube.cpp -o SkyCube.o
+
+%.d: %.c
+	$(CC) -MM $< > $@
 
 clean: 
 	rm -f *.o *~ 
